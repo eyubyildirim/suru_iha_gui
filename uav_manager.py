@@ -28,3 +28,7 @@ class UAVManager(metaclass=UAVManagerMeta):
 
     def set_real_uav_address(self, uav, address):
         self.real_uavs[uav].set_address(address)
+    
+    def set_uav_parameters(self, uav, d, z):
+        self.real_uavs[uav].set_d(d)
+        self.real_uavs[uav].set_z(z)

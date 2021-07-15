@@ -1,7 +1,9 @@
-from PyQt5.QtGui import QIntValidator
+from PyQt5 import QtCore
+from PyQt5.QtGui import QDoubleValidator, QIntValidator
 from uav_manager import UAVManager
-from PyQt5.QtWidgets import QComboBox, QErrorMessage, QHBoxLayout, QLabel, QLineEdit, QMessageBox, QPushButton, QTextEdit, QVBoxLayout, QWidget, QApplication, QSizePolicy, QSpacerItem
+from PyQt5.QtWidgets import QComboBox, QErrorMessage, QGridLayout, QHBoxLayout, QLabel, QLineEdit, QMessageBox, QPushButton, QTextEdit, QVBoxLayout, QWidget, QApplication, QSizePolicy, QSpacerItem
 from PyQt5.QtCore import Qt
+from lists import formations, missions
 
 # Getting the UAVManager instance
 uav_manager = UAVManager()
@@ -21,7 +23,10 @@ class Window(QWidget):
         self.setup_ui()
 
     def setup_ui(self):
-        main_layout = QVBoxLayout()
+        main_layout = QGridLayout()
+        main_layout.setSpacing(50)
+
+        uav_management_layout = QVBoxLayout()
 
         # Layouts needed for UAV count section
         uav_count_layout = QHBoxLayout()
@@ -61,7 +66,7 @@ class Window(QWidget):
         uav_count_layout.addLayout(set_uav_count)
 
         # Adding UAV count section to main layout
-        main_layout.addLayout(uav_count_layout, 1)
+        uav_management_layout.addLayout(uav_count_layout, 1)
 
         # Creating UAV address layout for this section
         uav_address_layout = QHBoxLayout()
@@ -75,7 +80,7 @@ class Window(QWidget):
         uav_address_layout.addWidget(self.current_uav)
         uav_address_layout.addWidget(set_address_button)
 
-        main_layout.addLayout(uav_address_layout, 1)
+        uav_management_layout.addLayout(uav_address_layout, 1)
 
         # Creating UAV parameters layout for this section
         uav_parameters_layout = QHBoxLayout()
@@ -103,7 +108,7 @@ class Window(QWidget):
 
         #
         set_parameters_button = QPushButton('Set Parameters')
-        set_address_button.clicked.connect(self.set_parameters)
+        set_parameters_button.clicked.connect(self.set_parameters)
         set_parameters_layout.addWidget(set_parameters_button)
         set_parameters_layout.addStretch()
 
@@ -113,9 +118,162 @@ class Window(QWidget):
         uav_parameters_layout.addLayout(set_parameters_layout)
 
         #
-        main_layout.addLayout(uav_parameters_layout, 1)
+        uav_management_layout.addLayout(uav_parameters_layout, 1)
+        uav_management_layout.setSpacing(10)
 
         # Adding required fields to the parameters layout
+
+        #
+        main_layout.addLayout(uav_management_layout, 0, 0)
+
+        #
+        mission_management_layout = QGridLayout()
+        take_off_button = QPushButton('Take-Off')
+        land_button = QPushButton('Land')
+        formation_menu = QComboBox()
+        self.populate_combobox(formation_menu, formations)
+        run_button = QPushButton('RUN')
+        mission_menu = QComboBox()
+        self.populate_combobox(mission_menu, missions)
+        select_mission_button = QPushButton('SELECT')
+
+        #
+        mission_management_layout.addWidget(take_off_button, 0, 0)
+        mission_management_layout.addWidget(land_button, 0, 1)
+        mission_management_layout.addWidget(formation_menu, 1, 0)
+        mission_management_layout.addWidget(run_button, 1, 1)
+        mission_management_layout.addWidget(mission_menu, 2, 0)
+        mission_management_layout.addWidget(select_mission_button, 2, 1)
+        mission_management_layout.setSpacing(10)
+
+        #
+        main_layout.addLayout(mission_management_layout, 1, 0)
+
+        #
+        third_layout = QGridLayout()
+        main_layout.addLayout(third_layout, 0, 1)
+
+        #
+        manual_control_layout = QVBoxLayout()
+
+        #
+        direct_commands_layout = QHBoxLayout()
+        position_goals_layout = QHBoxLayout()
+
+        #
+        roll_layout = QVBoxLayout()
+        pitch_layout = QVBoxLayout()
+        yaw_layout = QVBoxLayout()
+        thrust_layout = QVBoxLayout()
+        send_commands_button_layout = QVBoxLayout()
+
+        #
+        roll_label = QLabel('Roll')
+        pitch_label = QLabel('Pitch')
+        yaw_label = QLabel('Yaw')
+        thrust_label = QLabel('Thrust')
+
+        #
+        roll_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        pitch_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        yaw_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        thrust_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+
+        #
+        roll_edit = QLineEdit()
+        pitch_edit = QLineEdit()
+        yaw_edit = QLineEdit()
+        thrust_edit = QLineEdit()
+
+        #
+        roll_edit.setValidator(QDoubleValidator())
+        pitch_edit.setValidator(QDoubleValidator())
+        yaw_edit.setValidator(QDoubleValidator())
+        thrust_edit.setValidator(QDoubleValidator())
+
+        #
+        roll_layout.setSpacing(10)
+        roll_layout.addStretch()
+        roll_layout.addWidget(roll_label)
+        roll_layout.addWidget(roll_edit)
+        pitch_layout.setSpacing(10)
+        pitch_layout.addStretch()
+        pitch_layout.addWidget(pitch_label)
+        pitch_layout.addWidget(pitch_edit)
+        yaw_layout.setSpacing(10)
+        yaw_layout.addStretch()
+        yaw_layout.addWidget(yaw_label)
+        yaw_layout.addWidget(yaw_edit)
+        thrust_layout.setSpacing(10)
+        thrust_layout.addStretch()
+        thrust_layout.addWidget(thrust_label)
+        thrust_layout.addWidget(thrust_edit)
+        send_commands_button_layout.addStretch()
+        send_commands_button_layout.addWidget(QPushButton('Send Commands'))
+
+        #
+        direct_commands_layout.addLayout(roll_layout)
+        direct_commands_layout.addLayout(pitch_layout)
+        direct_commands_layout.addLayout(yaw_layout)
+        direct_commands_layout.addLayout(thrust_layout)
+        direct_commands_layout.addLayout(send_commands_button_layout)
+
+        #
+        x_layout = QVBoxLayout()
+        y_layout = QVBoxLayout()
+        z_layout = QVBoxLayout()
+        send_position_goals_layout = QVBoxLayout()
+
+        #
+        x_label = QLabel('X')
+        y_label = QLabel('Y')
+        z_label = QLabel('Z')
+
+        #
+        x_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        y_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        z_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+
+        #
+        x_edit = QLineEdit()
+        y_edit = QLineEdit()
+        z_edit = QLineEdit()
+        send_position_goals_button = QPushButton('Send Position Goals')
+
+        #
+        x_edit.setValidator(QDoubleValidator())
+        y_edit.setValidator(QDoubleValidator())
+        z_edit.setValidator(QDoubleValidator())
+
+        #
+        x_layout.setSpacing(10)
+        x_layout.addStretch()
+        x_layout.addWidget(x_label)
+        x_layout.addWidget(x_edit)
+        y_layout.setSpacing(10)
+        y_layout.addStretch()
+        y_layout.addWidget(y_label)
+        y_layout.addWidget(y_edit)
+        z_layout.setSpacing(10)
+        z_layout.addStretch()
+        z_layout.addWidget(z_label)
+        z_layout.addWidget(z_edit)
+        send_position_goals_layout.setSpacing(10)
+        send_position_goals_layout.addStretch()
+        send_position_goals_layout.addWidget(send_position_goals_button)
+
+        #
+        position_goals_layout.addLayout(x_layout)
+        position_goals_layout.addLayout(y_layout)
+        position_goals_layout.addLayout(z_layout)
+        position_goals_layout.addLayout(send_position_goals_layout)
+
+        #
+        manual_control_layout.addLayout(position_goals_layout)
+        manual_control_layout.addLayout(direct_commands_layout)
+
+        #
+        main_layout.addLayout(manual_control_layout, 1, 1)
 
         self.setLayout(main_layout)
 
@@ -123,6 +281,19 @@ class Window(QWidget):
         for i in range(uav_manager.real_uav_count):
             self.current_uav.addItem(str(i + 1))
         self.current_uav.currentIndexChanged.connect(self.current_uav_changed)
+
+    def populate_combobox(self, combobox, list_of_items):
+        for item in list_of_items:
+            combobox.addItem(str(item))
+        # combobox.addItem('Circle')
+        # combobox.addItem('Triangle')
+        # combobox.addItem('Square')
+        # combobox.addItem('Pentagon')
+        # combobox.addItem('Hexagon')
+        # combobox.addItem('V')
+        # combobox.addItem('Inverse-V')
+        # combobox.addItem('Crescent')
+        # combobox.addItem('Star')
 
     def set_address(self):
         uav_index = self.current_uav.currentIndex()
@@ -133,8 +304,7 @@ class Window(QWidget):
         d = self.d_edit.text()
         z = self.z_edit.text()
         uav_index = self.current_uav.currentIndex()
-        uav_manager.real_uavs[uav_index].set_d(d)
-        uav_manager.real_uavs[uav_index].set_z(z)
+        uav_manager.set_uav_parameters(uav_index, d, z)
 
     def current_uav_changed(self, uav_index):
         self.current_uav_address.setText(
