@@ -136,6 +136,8 @@ class Window(QWidget):
         mission_menu = QComboBox()
         self.populate_combobox(mission_menu, missions)
         select_mission_button = QPushButton('SELECT')
+        altitude_label = QLabel('Altitude: ')
+        altitude_edit = QLineEdit()
 
         #
         mission_management_layout.addWidget(take_off_button, 0, 0)
@@ -144,6 +146,8 @@ class Window(QWidget):
         mission_management_layout.addWidget(run_button, 1, 1)
         mission_management_layout.addWidget(mission_menu, 2, 0)
         mission_management_layout.addWidget(select_mission_button, 2, 1)
+        mission_management_layout.addWidget(altitude_label, 3, 0)
+        mission_management_layout.addWidget(altitude_edit, 3, 1)
         mission_management_layout.setSpacing(10)
 
         #
