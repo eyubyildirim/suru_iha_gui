@@ -1,3 +1,5 @@
+# İTÜ RAKE Sürü İHA Takımı Arayüz Çalışması
+
 from PyQt5 import QtCore
 from PyQt5.QtGui import QDoubleValidator, QIntValidator
 from uav_manager import UAVManager
