@@ -3,7 +3,7 @@ class UAV:
         self.address = address
         self.d = d
         self.z = z
-        pass
+        self.state_vector = []
 
     def get_address(self):
         return self.address
@@ -14,6 +14,9 @@ class UAV:
     def get_z(self):
         return self.z
 
+    def get_state_vector(self):
+        return self.state_vector
+
     def set_address(self, address):
         self.address = address
 
@@ -22,3 +25,6 @@ class UAV:
 
     def set_z(self, z):
         self.z = z
+
+    def set_state_vector(self, state_vector):
+        self.state_vector = state_vector

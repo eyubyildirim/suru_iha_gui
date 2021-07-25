@@ -326,6 +326,7 @@ class Window(QWidget):
             msg.setInformativeText('Please fill the blank LineEdit')
             msg.setWindowTitle("Error")
             msg.exec_()
+            return
         else:
             # If not, first delete previous items
             self.current_uav.clear()

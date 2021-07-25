@@ -16,6 +16,7 @@ class UAVManager(metaclass=UAVManagerMeta):
         self.real_uav_count = 0
         self.virtual_uav_count = 0
         self.real_uavs = []
+        self.uav_state_matrix = []
 
     def set_real_uav_count(self, count):
         self.real_uavs = []
@@ -32,3 +33,4 @@ class UAVManager(metaclass=UAVManagerMeta):
     def set_uav_parameters(self, uav, d, z):
         self.real_uavs[uav].set_d(d)
         self.real_uavs[uav].set_z(z)
+
